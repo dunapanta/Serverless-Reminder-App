@@ -7,3 +7,14 @@ TimeToLiveSpecification: {
         Enabled: true,
       },
 ```
+
+## Reminder App Clase 7 - Define data to save in DynamoDB
+```
+const data = {
+      ...body,
+      id: uuid(),
+      TTL: reminderDate / 1000, //TTL dynamo is in seconds
+      pk: userId, //group by user
+      sk: reminderDate.toString(), //sort by date
+    };
+```
