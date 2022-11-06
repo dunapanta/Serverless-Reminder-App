@@ -3,7 +3,7 @@ import { dynamo } from "@libs/dynamo";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { v4 as uuid } from "uuid";
 
-import { isEmail } from "utils/validations";
+import { isValidEmail } from "utils/validations";
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -27,18 +27,23 @@ export const handler = async (
     const userId = email || phoneNumber;
 
     const data = {
-      ...body,
       id: uuid(),
       TTL: reminderDate / 1000, //TTL dynamo is in seconds
       pk: userId, //group by user
       sk: reminderDate.toString(), //sort by date
+
+      userId,
+      reminder,
+      email,
+      phoneNumber,
+      reminderDate,
     };
 
     await dynamo.write(data, tableName);
 
     return formatJSONResponse({
       data: {
-        message: `Reminder i set for ${new Date(reminderDate).toDateString()}`,
+        message: `Reminder set for ${new Date(reminderDate).toDateString()}`,
         id: data.id,
       },
     });
@@ -63,17 +68,18 @@ const validateInputs = ({
   reminder: string;
   reminderDate: number;
 }) => {
-  if (isEmail(email)) {
+
+  if (!email && !phoneNumber) {
     return formatJSONResponse({
       statusCode: 400,
-      data: { message: "Invalid email" },
+      data: { message: "Email or Phone Number are required" },
     });
   }
 
-  if (!email || !phoneNumber) {
+  if (email && !isValidEmail(email)) {
     return formatJSONResponse({
       statusCode: 400,
-      data: { message: "Email and Phone Number are required" },
+      data: { message: "Invalid email" },
     });
   }
 
