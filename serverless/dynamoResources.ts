@@ -20,7 +20,7 @@ const dynamoResources: AWS["resources"]["Resources"] = {
       BillingMode: "PAY_PER_REQUEST",
 
       StreamSpecification: {
-        StreamViewType: "OLD_IMAGES",
+        StreamViewType: "OLD_IMAGE",
       },
 
       TimeToLiveSpecification: {

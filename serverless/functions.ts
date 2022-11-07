@@ -21,12 +21,20 @@ const functions: AWS["functions"] = {
           arn: {
             "Fn::GetAtt": ["reminderTable", "StreamArn"],
           },
-          fitlerPatterns: [
+          filterPatterns: [
             {
               eventName: ["REMOVE"],
             },
           ],
         },
+      },
+    ],
+    //@ts-expect-error
+    iamRoleStatements: [
+      {
+        Effect: "Allow",
+        Action: ["ses:SendEmail", "sns:Publish"],
+        Resource: "*",
       },
     ],
   },

@@ -9,6 +9,14 @@ TimeToLiveSpecification: {
       },
 ```
 
+- En `dynamoResources.ts`
+
+```
+StreamSpecification: {
+        StreamViewType: "OLD_IMAGE",
+      },
+```
+
 ## Reminder App Clase 7 - Define data to save in DynamoDB
 
 ```
@@ -27,7 +35,8 @@ const data = {
 - Para activar stream en DynamoDB se agrega una nueva propiedad en `dynamoResources`
 - Cada vez que se hace deploy hara match con arn
 - Específico solo para eventos `REMOVE`
-- Tambien se puede especificat `batchSize` es util si ocurre multiples veces en un minuto o en un segundo se puede decir enviame 10 eventos  lo cual es mas eficiente que tener lambdas separadas o que envie uno a la vez
+- Tambien se puede especificat `batchSize` es util si ocurre multiples veces en un minuto o en un segundo se puede decir enviame 10 eventos lo cual es mas eficiente que tener lambdas separadas o que envie uno a la vez
+
 ```
 sendReminder:{
     handler: "src/functions/sendReminder/index.handler",
@@ -50,17 +59,21 @@ sendReminder:{
 ```
 
 ## Reminder App Clase 10 - Reminder endpoint
+
 - Es necesario utilizar `unmarshall` para convertir el objeto a JSON porque en dynamoDB se guarda diferente con el tipo de dato
 - Ejecutar `npm i @aws-sdk/util-dynamodb`
 - Se importa `unmarshall` de `@aws-sdk/util-dynamodb`
 
 ## Reminder App Clase 11 - SES and SNS setup
+
 - Se puede usar un sandbox para probar los servicios a nosotros mismos
 - Se agrega el correo en SES y el telefono en SNS
 
 ## Reminder App Clase 12 - Send SMS and Send Email functions
+
 - Email
 - Ejecutar `npm i -S @aws-sdk/client-ses`
+
 ```
 const sendEmail = async ({
   email,
@@ -97,6 +110,7 @@ const sendEmail = async ({
 
 - SMS
 - Ejecutar `npm i -S @aws-sdk/client-sns`
+
 ```
 const sendSMS = async ({
   phoneNumber,
@@ -115,4 +129,21 @@ const sendSMS = async ({
 
   return res.MessageId;
 };
+```
+
+## Reminder App Clase 13 - Deploy and permissions
+
+- Para agregar permisos a lambdas
+- Ejecutar `npm i -D serverless-iam-roles-per-function`
+- Este plugin permite agregar permisos a cada función definiendo `iamRoleStatements`
+
+```
+ //@ts-expect-error
+    iamRoleStatements: [
+      {
+        Effect: "Allow",
+        Action: ["ses:SendEmail", "sns:Publish"],
+        Resource: "*",
+      },
+    ],
 ```
