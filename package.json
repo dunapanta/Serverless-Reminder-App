@@ -12,6 +12,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.202.0",
     "@aws-sdk/lib-dynamodb": "^3.202.0",
+    "@aws-sdk/util-dynamodb": "^3.204.0",
     "@middy/core": "^3.4.0",
     "@middy/http-json-body-parser": "^3.4.0",
     "uuid": "^9.0.0"

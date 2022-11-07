@@ -48,3 +48,8 @@ sendReminder:{
     ]
   }
 ```
+
+## Reminder App Clase 10 - Reminder endpoint
+- Es necesario utilizar `unmarshall` para convertir el objeto a JSON porque en dynamoDB se guarda diferente con el tipo de dato
+- Ejecutar `npm i @aws-sdk/util-dynamodb`
+- Se importa `unmarshall` de `@aws-sdk/util-dynamodb`
