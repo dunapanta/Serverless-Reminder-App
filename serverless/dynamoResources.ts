@@ -19,6 +19,10 @@ const dynamoResources: AWS["resources"]["Resources"] = {
       ],
       BillingMode: "PAY_PER_REQUEST",
 
+      StreamSpecification: {
+        StreamViewType: "OLD_IMAGES",
+      },
+
       TimeToLiveSpecification: {
         AttributeName: "TTL",
         Enabled: true,

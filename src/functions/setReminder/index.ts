@@ -27,16 +27,17 @@ export const handler = async (
     const userId = email || phoneNumber;
 
     const data = {
+      ...body,
       id: uuid(),
       TTL: reminderDate / 1000, //TTL dynamo is in seconds
       pk: userId, //group by user
       sk: reminderDate.toString(), //sort by date
 
-      userId,
-      reminder,
-      email,
-      phoneNumber,
-      reminderDate,
+      //userId,
+      //reminder,
+      //email,
+      //phoneNumber,
+      //reminderDate,
     };
 
     await dynamo.write(data, tableName);
