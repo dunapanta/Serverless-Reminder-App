@@ -53,3 +53,66 @@ sendReminder:{
 - Es necesario utilizar `unmarshall` para convertir el objeto a JSON porque en dynamoDB se guarda diferente con el tipo de dato
 - Ejecutar `npm i @aws-sdk/util-dynamodb`
 - Se importa `unmarshall` de `@aws-sdk/util-dynamodb`
+
+## Reminder App Clase 11 - SES and SNS setup
+- Se puede usar un sandbox para probar los servicios a nosotros mismos
+- Se agrega el correo en SES y el telefono en SNS
+
+## Reminder App Clase 12 - Send SMS and Send Email functions
+- Email
+- Ejecutar `npm i -S @aws-sdk/client-ses`
+```
+const sendEmail = async ({
+  email,
+  reminder,
+}: {
+  email: string;
+  reminder: string;
+}) => {
+  const params: SendEmailCommandInput = {
+    Source: "source.@email.com",
+    Destination: {
+      ToAddresses: [email],
+    },
+    Message: {
+      Body: {
+        Text: {
+          Charset: "UTF-8",
+          Data: reminder,
+        },
+      },
+      Subject: {
+        Charset: "UTF-8",
+        Data: "Reminder!!",
+      },
+    },
+  };
+  const command = new SendEmailCommand(params);
+
+  const res = await sesClient.send(command);
+
+  return res.MessageId;
+};
+```
+
+- SMS
+- Ejecutar `npm i -S @aws-sdk/client-sns`
+```
+const sendSMS = async ({
+  phoneNumber,
+  reminder,
+}: {
+  phoneNumber: string;
+  reminder: string;
+}) => {
+  const params: PublishCommandInput = {
+    Message: reminder,
+    PhoneNumber: phoneNumber,
+  };
+  const command = new PublishCommand(params);
+
+  const res = await snsClient.send(command);
+
+  return res.MessageId;
+};
+```
