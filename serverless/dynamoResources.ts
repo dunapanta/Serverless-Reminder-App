@@ -10,6 +10,14 @@ const dynamoResources: AWS["resources"]["Resources"] = {
           AttributeName: "id",
           AttributeType: "S",
         },
+        {
+          AttributeName: "pk",
+          AttributeType: "S",
+        },
+        {
+          AttributeName: "sk",
+          AttributeType: "S",
+        },
       ],
       KeySchema: [
         {
@@ -27,6 +35,25 @@ const dynamoResources: AWS["resources"]["Resources"] = {
         AttributeName: "TTL",
         Enabled: true,
       },
+
+      GlobalSecondaryIndexes: [
+        {
+          IndexName: "index1",
+          KeySchema: [
+            {
+              AttributeName: "pk",
+              KeyType: "HASH",
+            },
+            {
+              AttributeName: "sk",
+              KeyType: "RENGE",
+            },
+          ],
+          Projection: {
+            ProjectionType: "ALL",
+          }
+        },
+      ],
     },
   },
 };

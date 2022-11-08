@@ -147,3 +147,51 @@ const sendSMS = async ({
       },
     ],
 ```
+
+## Reminder App Clase 14 - DynamoDB Secondary Index
+
+- En `dynamoResources.ts` en `AtributesDefinitions` se agrega
+  ```
+        {
+          AttributeName: "pk",
+          AttributeType: "S",
+        },
+        {
+          AttributeName: "sk",
+          AttributeType: "S",
+        },
+  ```
+- En `GlobalSecondaryIndexes` se agrega
+  ```
+        GlobalSecondaryIndexes: [
+        {
+          IndexName: "index1",
+          KeySchema: [
+            {
+              AttributeName: "pk",
+              KeyType: "HASH",
+            },
+            {
+              AttributeName: "sk",
+              KeyType: "RENGE",
+            },
+          ],
+          Projection: {
+            ProjectionType: "ALL",
+          }
+        },
+      ],
+  ```
+  - Se necesita especificar los permisos para los indeces de la tabla en `serverless.ts`
+  ```
+  iamRoleStatements: [
+      {
+        Effect: "Allow",
+        Action: "dynamodb:*",
+        Resource: [
+          "arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${self:custom.reminderTable}",
+          "arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${self:custom.reminderTable}/index/index1",
+        ],
+      },
+    ],
+  ```
