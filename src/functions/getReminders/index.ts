@@ -1,9 +1,6 @@
 import { formatJSONResponse } from "@libs/apiGateway";
 import { dynamo } from "@libs/dynamo";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { v4 as uuid } from "uuid";
-
-import { isValidEmail } from "utils/validations";
 
 export const handler = async (
   event: APIGatewayProxyEvent
@@ -37,46 +34,4 @@ export const handler = async (
       },
     });
   }
-};
-
-const validateInputs = ({
-  email,
-  phoneNumber,
-  reminder,
-  reminderDate,
-}: {
-  email?: string;
-  phoneNumber?: string;
-  reminder: string;
-  reminderDate: number;
-}) => {
-  if (!email && !phoneNumber) {
-    return formatJSONResponse({
-      statusCode: 400,
-      data: { message: "Email or Phone Number are required" },
-    });
-  }
-
-  if (email && !isValidEmail(email)) {
-    return formatJSONResponse({
-      statusCode: 400,
-      data: { message: "Invalid email" },
-    });
-  }
-
-  if (!reminder) {
-    return formatJSONResponse({
-      statusCode: 400,
-      data: { message: "Reminder is required" },
-    });
-  }
-
-  if (!reminderDate) {
-    return formatJSONResponse({
-      statusCode: 400,
-      data: { message: "Reminder Date is required" },
-    });
-  }
-
-  return;
 };

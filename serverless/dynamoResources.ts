@@ -46,7 +46,7 @@ const dynamoResources: AWS["resources"]["Resources"] = {
             },
             {
               AttributeName: "sk",
-              KeyType: "RENGE",
+              KeyType: "RANGE",
             },
           ],
           Projection: {
